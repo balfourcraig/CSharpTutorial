@@ -1,0 +1,181 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{scalerel}
+
+
+
+\definecolor{myred}{rgb}{0.7,0.1,0} 
+\definecolor{myblue}{rgb}{0,0.1,0.35}
+\definecolor{mygreen}{rgb}{0,0.6,0.1}
+\definecolor{cyan}{rgb}{0.0,0.5,0.4}
+\definecolor{lightback}{rgb}{0.95,0.95,0.95}
+\definecolor{numcolor}{rgb}{0.6,0.6,0.6}
+
+\lstset{
+language=csh,
+basicstyle=\footnotesize\ttfamily,
+numbers=left,
+numberstyle=\tiny\color{numcolor},
+numbersep=10pt,
+tabsize=2,
+extendedchars=true,
+breaklines=true,
+frame= single,
+stringstyle=\color{myred}\ttfamily,
+showspaces=false,
+showtabs=false,
+xleftmargin=17pt,
+framexleftmargin=17pt,
+framexrightmargin=5pt,
+framexbottommargin=4pt,
+commentstyle=\color{mygreen},
+morecomment=[l]{//}, %use comment-line-style!
+morecomment=[s]{/*}{*/}, %for multiline comments
+showstringspaces=false,
+morekeywords={
+async, await,
+abstract, event, new, struct,
+as, explicit, null, switch,
+base, extern, object, this,
+bool, false, operator, throw,
+break, finally, out, true,
+byte, fixed, override, try,
+case, float, params, typeof,
+catch, for, private, uint,
+char, foreach, protected, ulong,
+checked, goto, public, unchecked,
+class, if, readonly, unsafe,
+const, implicit, ref, ushort,
+continue, in, return, using,
+decimal, int, sbyte, virtual,
+default, interface, sealed, volatile,
+delegate, internal, short, void,
+do, is, sizeof, while,
+double, lock, stackalloc,
+else, long, static,
+enum, namespace, string},
+keywordstyle=\color{myblue},
+identifierstyle=\color{cyan},
+backgroundcolor=\color{lightback},
+}
+
+\hypersetup{
+   	colorlinks=true,
+	linkcolor=cyan,
+	urlcolor=blue,
+}
+
+\begin{document}
+
+\title{A Brief Overview of C\#}
+\author{Craig Balfour\\
+        Southern Institue of Technology\\
+	\texttt{craig.balfour@sit.ac.nz}}
+\date{\today}
+\maketitle
+
+\paragraph{Overview:}
+This is a quick intro to C\# to bridge the gap from the Java book.
+
+
+\section{Structure of a C\# program}
+Below is a very simple C\# program, the famous ``Hello World'' program.\\
+
+Comments in C\# begin with a // and are very useful for explaining what's happening. I have commented every line of the below program to explain what is going on.\\
+
+Note that when copying code out a pdf, you may end up with the line numbers included, or some funky formatting.
+
+\begin{lstlisting}
+using System; //This is a using statement, which brings in a library of code which we can use. There are a lot of libraries, the most common ones to use are in the various System namespaces
+namespace BeginningCsharp { //A namespace is a collection of classes. You can think of a namespace a bit like a folder, and classes as the files inside it
+    class Program { //A class is a special thing, which I won't go into here. A class can contain both data and behaviour, but for now, a class is just an area which we can put methods in
+        static void Main(string[] args) { //this is a method (called functions in other languages). This one is the Main method, and is special. Every C# program must have one and only one Main method, and it's where the program starts
+            Console.WriteLine("Hello World!"); // Console is a class from the System library, and offers some useful things for talking to the screen. WriteLine is a method which the Console class has. We can use this method to write to the screen.
+        }
+    }
+}
+\end{lstlisting}
+
+
+\section{Reading User Input}
+Java has the Scanner class which is uses for user input. C\# does not have this class, instead it uses the Console class, which does not support the same methods.
+
+\paragraph{NextInt}
+Java's Scanner contains a method called NextInt which returns the next integer in the input stream. C\# does not have this exact functionality, however it's not too hard to replicate it. The method below can simply be copied into your project, just paste it below Main (or anywhere inside the class really)\\
+Don't worry too much about the exact syntax here, you just need to call it. The interesting bits to come back to at a later point, are the `out' parameter on TryParse, the optional parameter, and the recursive call on the last line.
+
+\begin{lstlisting}
+public static int ReadInt32(bool showMessageIfInvalid = true) {
+	if (int.TryParse(Console.ReadLine(), out int result)) {
+		return result;
+	}
+	else {
+		if (showMessageIfInvalid) {
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine("Invalid input. Parse to int failed");
+			Console.ResetColor();
+		}
+		return ReadInt32(showMessageIfInvalid);
+	}
+}
+\end{lstlisting}
+
+\section{Looping input}
+Loops are a fundamental element of almost every program.
+
+\paragraph{}
+ In the lab exercises, a lot talk about a ``sentinel controlled loop'', which just means loop until a pre-defined
+
+\begin{lstlisting}[caption={The normal way}]
+string input = Console.ReadLine(); //Create a string variable and initialise it to console input
+while(input != "#") {//check if it's our sentinel
+    //do some stuff. The program goes here
+    input = Console.ReadLine(); //Get the next input and return to the top of the loop (recheck) Without this line, you will have an infinite loop
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={The fancy way}]
+for(string input = Console.ReadLine(); input != "#"; input = Console.ReadLine()) {
+    //do some stuff
+}
+//Note that this way does not have the extra line at end, making it much harder to get an accidental infinite loop
+\end{lstlisting}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
